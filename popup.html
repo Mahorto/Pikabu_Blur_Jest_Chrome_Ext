@@ -21,14 +21,23 @@
 			<input type="range" id="blur_range" min="0" max="60" step="1" value="30" style="width:85%"> 
 			<p><img src="Pikabu_Logo.png" alt="" id="pic" height="80" width="228" style="border-radius: 8px;"></p>
 		</div>
-		<div>
+		<hr>
 			<div class="textdescmin">
 				Список тегов:
 			</div>
+		<div style="visibility:hidden;height:1px">
 			<input type="text" id="add_tags_list_text" name="save" placeholder="Введите теги через запятую">
 		</div>
-		<hR>
-		<div>
+		<ul class="border" id="TagsList">
+		  <li>Элемент списка</li>
+		  <li>Элемент списка</li>
+		  <input type="text" id="add_tags_list_text" name="save" placeholder="Введите теги через запятую">
+		</ul>
+		<div id="Add_btn_div">
+			<img src="add_btn.png" id="add_pic" class="add_pic" height="32" width="32">
+		</div>
+		<hr>
+		<div id="add_tags_list_btn_div">
 			<button id="add_tags_list_btn">Обновить настройки</button>
 		</div>
 	</div>

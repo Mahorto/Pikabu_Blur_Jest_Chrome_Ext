@@ -81,19 +81,38 @@ function blur_post(tags_array_f,sty_f){
 }
 
 function init_popup(event){
-	
+	var init_tag_list
 	chrome.storage.local.get("tagslist", function (data) {
 		if (data.tagslist != null) {
 			document.getElementById("add_tags_list_text").value = data.tagslist;
+			init_tag_list = data.tagslist;
 		} else {			
 			chrome.storage.local.set({tagslist: 'Жесть,NSFW'});
-			document.getElementById("add_tags_list_text").value='Жесть,NSFW';
+			document.getElementById("add_tags_list_text").value='Жесть,NSFW';			
+			init_tag_list = 'Жесть,NSFW';
+		}
+		if (init_tag_list.substr(init_tag_list.length-1,1)==','){
+			init_tag_list=init_tag_list.substr(0,init_tag_list.length-1);
+			chrome.storage.local.set({tagslist: init_tag_list});
+		}
+		my_div = document.getElementById("TagsList");
+		while(my_div.firstChild){
+			my_div.removeChild(my_div.firstChild);
+		}
+		for (let tag of init_tag_list.split(',')){
+			var newLi = document.createElement("li");
+			newLi.id='liid-'+tag;
+			newLi.innerHTML = tag+'<img src="del_btn.png" class="del_pic" id="'+tag+'" height="16" width="16" >';
+			my_div.append(newLi);
+			document.getElementById(tag).addEventListener("click",del_tag);
+			
 		}
 		if (document.getElementById("add_tags_list_btn")) {
 			document.getElementById("add_tags_list_btn").addEventListener("click",click_tags_btn);	
 			document.getElementById('blur_range').addEventListener("mousemove",on_change_blur_size);
 			document.getElementById("pic").addEventListener("mouseover",on_mouseover_blur);
 			document.getElementById("pic").addEventListener("mouseout",on_mouseout_blur);
+			document.getElementById("add_pic").addEventListener("click",add_tag);
 		}
 	});
 	chrome.storage.local.get("blur_size", function (data) {
@@ -115,9 +134,82 @@ function init_popup(event){
 			document.getElementById('blur_range').addEventListener("mousemove",on_change_blur_size);
 			document.getElementById("pic").addEventListener("mouseover",on_mouseover_blur);
 			document.getElementById("pic").addEventListener("mouseout",on_mouseout_blur);
+			document.getElementById("add_pic").addEventListener("click",add_tag);
 		}
 	});
 	
+}
+
+function del_tag(event){	
+	chrome.storage.local.get("tagslist", function (data) {
+		if (data.tagslist != null) {
+			if (data.tagslist) {
+				init_tag_list = data.tagslist;				
+				if (event.target.id.toLowerCase() == data.tagslist.toLowerCase().split(',')[0]) {
+					var replace_str=event.target.id+','
+				} else {
+					if (event.target.id.toLowerCase() == 'new_tag'){
+						var replace_str=''
+					} else {
+					var replace_str=','+event.target.id
+					}
+				}
+				chrome.storage.local.set({tagslist: init_tag_list.replace(replace_str,'')});			
+			}
+		}
+		chrome.storage.local.get("tagslist", function (data) {
+			if (data.tagslist != null) {
+				document.getElementById("add_tags_list_text").value = data.tagslist;
+				init_tag_list = data.tagslist;
+			} else {			
+				chrome.storage.local.set({tagslist: 'Жесть,NSFW'});
+				document.getElementById("add_tags_list_text").value='Жесть,NSFW';			
+				init_tag_list = 'Жесть,NSFW';
+			}
+			my_div = document.getElementById("TagsList");
+			while(my_div.firstChild){
+				my_div.removeChild(my_div.firstChild);
+			}
+			for (let tag of init_tag_list.split(',')){
+				var newLi = document.createElement("li");
+				newLi.innerHTML = tag+'<img src="del_btn.png" class="del_pic" id="'+tag+'" height="16" width="16" >';
+				my_div.append(newLi);
+				document.getElementById(tag).addEventListener("click",del_tag);			
+			}
+		});
+	});
+	
+}
+
+function add_tag(event){
+	chrome.storage.local.get("tagslist", function (data) {
+		if (data.tagslist != null) {
+			document.getElementById("add_tags_list_text").value = data.tagslist;
+			init_tag_list = data.tagslist;
+		} else {
+			chrome.storage.local.set({tagslist: 'Жесть,NSFW'});
+			document.getElementById("add_tags_list_text").value='Жесть,NSFW';			
+			init_tag_list = 'Жесть,NSFW';
+		}
+		my_div = document.getElementById("TagsList");	
+		while(my_div.firstChild){
+			my_div.removeChild(my_div.firstChild);
+		}
+		for (let tag of init_tag_list.split(',')){
+			var newLi = document.createElement("li");
+			newLi.innerHTML = tag+'<img src="del_btn.png" class="del_pic" id="'+tag+'" height="16" width="16" >';
+			my_div.append(newLi);
+			document.getElementById(tag).addEventListener("click",del_tag);				
+		}	
+		var newIn = document.createElement("input");
+		newIn.type ='text';
+		newIn.id='add_new_tag';
+		newIn.name='save';
+		newIn.placeholder='Введите теги через запятую';		
+		my_div.append(newIn);
+		document.getElementById("Add_btn_div").removeChild(document.getElementById("add_pic"));		
+		document.getElementById('add_new_tag').classList.add('b-show-new-tag');
+	});
 }
 
 function on_change_blur_size(event){
@@ -139,17 +231,53 @@ function on_mouseout_blur(event){
 function click_tags_btn(event){
 	console.log(document.getElementById("add_tags_list_text").value)
 	console.log(document.getElementById("blur_range").value)
-	chrome.storage.local.set({tagslist: document.getElementById("add_tags_list_text").value});
+	//chrome.storage.local.set({tagslist: document.getElementById("add_tags_list_text").value});
 	chrome.storage.local.set({blur_size: document.getElementById("blur_range").value});
 	chrome.storage.local.get("tagslist", function (data) {
 		console.log(data.tagslist)
-		document.getElementById("add_tags_list_text").value = data.tagslist;
+		if (document.getElementById("add_new_tag").value != null){
+			if (document.getElementById("add_new_tag").value != ''){
+				var new_tag_list = data.tagslist+','+document.getElementById("add_new_tag").value;
+			} else {
+				var new_tag_list = data.tagslist
+			}
+		} else {
+			
+			var new_tag_list = data.tagslist
+		}
+		
+		my_div = document.getElementById("TagsList");	
+		my_div.removeChild(document.getElementById("add_new_tag"));		
+		chrome.storage.local.set({tagslist: new_tag_list});		
+		while(my_div.firstChild){
+			my_div.removeChild(my_div.firstChild);
+		}
+		for (let tag of new_tag_list.split(',')){
+			var newLi = document.createElement("li");
+			newLi.innerHTML = tag+'<img src="del_btn.png" class="del_pic" id="'+tag+'" height="16" width="16" >';
+			my_div.append(newLi);
+			document.getElementById(tag).addEventListener("click",del_tag);			
+		}
 	});
 	chrome.storage.local.get("blur_size", function (data) {
 		console.log(data.blur_size)
 		document.getElementById("blur_range").value = data.blur_size;
 	});
-	
+	if (!document.getElementById("add_pic")){
+		my_div = document.getElementById("Add_btn_div");
+		var newImg = document.createElement("img")
+		newImg.id="add_pic";
+		newImg.src="add_btn.png";
+		newImg.class="add_pic";
+		newImg.width='32';
+		newImg.height="32";
+		newImg.style.cssText = 'block:none;';
+		my_div.append(newImg);
+		document.getElementById("add_pic").addEventListener("click",add_tag);
+		document.getElementById("add_pic").classList.add('b-show-add');
+		//.classList.add('b-show');
+		
+	}
 }
 
 function on_click(event){
