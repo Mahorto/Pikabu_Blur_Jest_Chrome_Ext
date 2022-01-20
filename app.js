@@ -255,8 +255,10 @@ function click_tags_btn(event){
 			
 		}
 		
-		my_div = document.getElementById("TagsList");	
-		my_div.removeChild(document.getElementById("add_new_tag"));		
+		if (document.getElementById("add_new_tag")){
+			my_div = document.getElementById("TagsList");	
+			my_div.removeChild(document.getElementById("add_new_tag"));		
+		}
 		chrome.storage.local.set({tagslist: new_tag_list});		
 		while(my_div.firstChild){
 			my_div.removeChild(my_div.firstChild);
