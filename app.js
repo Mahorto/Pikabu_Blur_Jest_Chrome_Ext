@@ -24,7 +24,7 @@ function blur_jest() {
 	var sty = "Filter: blur(%size%px);"
 	
 	//if (document.readyState === "complete") {
-		//try {
+		try {
 			chrome.storage.local.get("tagslist", function (data) {	
 				if (data.tagslist) {
 					tags_array = data.tagslist.toLowerCase().split(',');							
@@ -41,11 +41,11 @@ function blur_jest() {
 					blur_post(tags_array,sty)
 				});				
 			});
-			/*
+			
 		} catch (e) {
 			console.log("Error in blur_jest()")
 			console.log(e)
-		}*/
+		}
 	//}
 }
 
@@ -209,7 +209,16 @@ function add_tag(event){
 		my_div.append(newIn);
 		document.getElementById("Add_btn_div").removeChild(document.getElementById("add_pic"));		
 		document.getElementById('add_new_tag').classList.add('b-show-new-tag');
+		document.getElementById('add_new_tag').addEventListener("keyup",enter_key);
+		document.getElementById('add_new_tag').focus();
+		
 	});
+}
+
+function enter_key(event){
+	if (event.keyCode === 13) { //enter
+		click_tags_btn(event);
+	}
 }
 
 function on_change_blur_size(event){
@@ -235,15 +244,15 @@ function click_tags_btn(event){
 	chrome.storage.local.set({blur_size: document.getElementById("blur_range").value});
 	chrome.storage.local.get("tagslist", function (data) {
 		console.log(data.tagslist)
-		if (document.getElementById("add_new_tag").value != null){
+		if (document.getElementById("add_new_tag") === null){
+			var new_tag_list = data.tagslist
+		} else {
 			if (document.getElementById("add_new_tag").value != ''){
 				var new_tag_list = data.tagslist+','+document.getElementById("add_new_tag").value;
 			} else {
 				var new_tag_list = data.tagslist
 			}
-		} else {
 			
-			var new_tag_list = data.tagslist
 		}
 		
 		my_div = document.getElementById("TagsList");	
@@ -290,7 +299,8 @@ function on_mouseover(event){
 }
 
 function on_mouseout(event){
-	event.target.closest(".story__main").querySelector('.story__content-inner').setAttribute("style", s)
-	event.target.closest(".story__main").querySelector('.story__content-inner').style.cssText = s;
-	notinpost=true
+	//event.target.closest(".story__main").querySelector('.story__content-inner').setAttribute("style", s)
+	//event.target.closest(".story__main").querySelector('.story__content-inner').style.cssText = s;
+	notinpost=true;
+	blur_jest()
 }
