@@ -1,0 +1,66 @@
+.BodyDiv{
+  font-family: Roboto;
+  text-align: center;
+  width: 250px;	
+}
+.textdesc{
+  margin: 5px;
+  font-size: 15px;	
+	
+}
+.textdescmin{
+  margin: 5px;
+  font-size: 13px;		
+}
+button#add_tags_list_btn {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  border-radius: 8px;
+  color: white;  
+  text-decoration: none;
+  display: inline-block;
+  font-size: 13px;	
+  transition-duration: 0.2s;
+  width: 90%;
+  height: 30px;
+  left: 5%;
+  right: 5%;
+  margin: 5px;
+}
+button#add_tags_list_btn:hover {
+  background-color: white; 
+  color: black;
+  border: 1px solid #4CAF50; /* Green */
+  box-shadow: 0 8px 8px 0 rgba(0,0,0,0.24), 0 10px 25px 0 rgba(0,0,0,0.19);
+}
+input#add_tags_list_text{
+  border: 1px solid #4CAF50;
+  border-radius: 8px;  
+  display: inline-block;
+  font-size: 13px;	 
+  outline: none;  
+  width: 85%;
+  height: 30px;
+  left: 5%;
+  right: 5%;
+  margin: 5px;
+}
+span.version {
+  float: right;
+  font-size: 15px;
+  font-weight: bold;
+  right: 5%; 
+}
+input[type="text" i]{
+  font-family: Roboto;
+  text-align: center;
+}
+hr {
+    border: none; /* Убираем границу */
+    background-color: #d3d3d3; /* Цвет линии */
+    color: #d3d3d3; /* Цвет линии для IE6-7 */
+    height: 1px; /* Толщина линии */
+   }
+input[type=range]::-webkit-slider-thumb {  
+  background: #4caf50;
+}

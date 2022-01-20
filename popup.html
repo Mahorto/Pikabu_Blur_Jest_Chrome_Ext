@@ -1,26 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <meta charset="utf-8">	
-   <title>Pikabu Blur Jest</title>
-   <script src="app.js"></script>
+	<meta charset="utf-8">	
+	<title>Pikabu Blur Jest</title>
+	<script src="app.js"></script>
+	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-  <!--контейнер, содержащий название, логотип и номер версии-->
-  <div class="modal-header">
-    <h1 class="logo">
-      <span class="version">v 1.1</span>
-   </h1>
-  </div>
-  <!--Конец контейнера-->
-  <!--контейнер, содержащий описание функций расширения-->
-  <div class="modal-content">
-    <p>Блюрим посты по тегу</p>
-  </div>
-  <!--Конец контейнера-->
-    <input type="text" id="add_tags_list_text" name="save" placeholder="Введите теги через запятую">
-    <button id="add_tags_list_btn">Обновить теги</button>
-
+	<div class="BodyDiv">
+		<p></p>
+		<div class="textdesc">
+			Блюрим посты по тегу
+		</div>
+		<p style="hh"></p>
+		<hr>
+		<div>
+			<div class="textdescmin">
+				Регулировка степени размытия:
+			</div>
+			<input type="range" id="blur_range" min="0" max="60" step="1" value="30" style="width:85%"> 
+			<p><img src="Pikabu_Logo.png" alt="" id="pic" height="80" width="228" style="border-radius: 8px;"></p>
+		</div>
+		<div>
+			<div class="textdescmin">
+				Список тегов:
+			</div>
+			<input type="text" id="add_tags_list_text" name="save" placeholder="Введите теги через запятую">
+		</div>
+		<hR>
+		<div>
+			<button id="add_tags_list_btn">Обновить настройки</button>
+		</div>
+	</div>
 </body>
 </html>
