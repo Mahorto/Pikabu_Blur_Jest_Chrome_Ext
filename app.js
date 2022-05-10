@@ -22,7 +22,16 @@ function blur_jest() {
 
 	var tags_array = null
 	var sty = "Filter: blur(%size%px);"
-	
+/*
+	var tag_popup_div = document.querySelector('.tag-hint menu menu_vertical menu_padding_none')
+	if (tag_popup_div){
+		var newDiv = document.createElement("div");
+		newDiv.class='menu__item';
+		newDiv.innerHTML = 'Заблюрить тег';
+		tag_popup_div.append(newDiv);
+		//document.getElementById(tag).addEventListener("click",del_tag);
+	}
+	*/
 	//if (document.readyState === "complete") {
 		try {
 			chrome.storage.local.get("tagslist", function (data) {	
